@@ -1,0 +1,67 @@
+#VRML_SIM R2025a utf8
+
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackground.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+
+WorldInfo {
+}
+Viewpoint {
+  orientation -0.2624541411887986 -0.11161349129057845 0.9584676584709461 3.915695738687748
+  position 1.9310703309461057 2.0864819140978725 1.9621652180091333
+}
+TexturedBackground {
+}
+TexturedBackgroundLight {
+}
+RectangleArena {
+  floorSize 2 2
+}
+Solid {
+  children [
+    DEF Ball Shape {
+      appearance PBRAppearance {
+        roughness 1
+        metalness 0
+      }
+      geometry Sphere {
+        radius 0.05
+      }
+    }
+  ]
+  name "solid(1)"
+  boundingObject USE Ball
+  physics Physics {
+  }
+}
+Solid {
+  translation -0.2064197153775466 0.10277307092619978 0.09342527489456952
+  rotation 0.6970089038540919 0.463485057327679 -0.5471381814332421 2.7763432792727536
+  children [
+    DEF Ball_2 Shape {
+      appearance PBRAppearance {
+        baseColor 1 1 0
+        roughness 1
+        metalness 0
+      }
+      geometry Sphere {
+        radius 0.05
+      }
+    }
+  ]
+  boundingObject USE Ball_2
+  physics Physics {
+  }
+}
+E-puck {
+  translation -0.1973572663916528 0.23253721855453036 -6.433525290443567e-05
+  rotation 0.0005293187092368744 0.0005210430632575018 -0.9999997241678771 1.3236684922065518
+  controller "epuck_distinguish"
+  turretSlot [
+    Display {
+      width 52
+      height 39
+    }
+  ]
+}

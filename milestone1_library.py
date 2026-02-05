@@ -5,6 +5,13 @@ import math
 # Utility functions
 # ===============================
 
+def resize_image(image, new_width, new_height):
+    h, w = image.shape[:2]
+    y_idx = (np.linspace(0, h - 1, new_height)).astype(int)
+    x_idx = (np.linspace(0, w - 1, new_width)).astype(int)
+    return image[np.ix_(y_idx, x_idx)]
+
+
 def center_of_mass(blob):
     xs = [p[1] for p in blob]
     ys = [p[0] for p in blob]
@@ -130,7 +137,7 @@ class BlobFeature:
     def __init__(self, blob, frame, gx, gy, motion_mask):
         self.blob = blob
         self.center = center_of_mass(blob)
-        self.bbox = bounding_box(blob)  # 🔹 ADD ONLY THIS
+        self.bbox = bounding_box(blob)
 
         self.color = color_histogram(blob, frame)
         self.hog = hog_histogram(blob, gx, gy)
@@ -159,6 +166,9 @@ class PerceptionSystem:
         ]) / 16.0
 
     def load_goal_image(self, goal_img):
+        # 🔹 ONLY CHANGE: resize goal image to 52x52
+        goal_img = resize_image(goal_img, 52, 52)
+
         gray = np.dot(goal_img[..., :3], [0.299, 0.587, 0.114])
         gx, gy = compute_gradients(gray)
 
@@ -168,7 +178,6 @@ class PerceptionSystem:
         self.goal_color = color_histogram(blob, goal_img)
         self.goal_hog = hog_histogram(blob, gx, gy)
 
-        print("Goal image loaded")
 
     def process_frame(self, frame_rgb):
         gray = np.dot(frame_rgb[..., :3], [0.299, 0.587, 0.114])
@@ -183,7 +192,7 @@ class PerceptionSystem:
         gx, gy = compute_gradients(gray)
         mag = np.sqrt(gx**2 + gy**2)
 
-        edges = mag > 80 #60
+        edges = mag > 80
         edges = binary_erosion(edges)
         edges = binary_dilation(edges)
 

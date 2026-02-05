@@ -4,12 +4,16 @@ EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/project
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/backgrounds/protos/TexturedBackgroundLight.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/RectangleArena.proto"
 EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/robots/gctronic/e-puck/protos/E-puck.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/apartment_structure/protos/Wall.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Roughcast.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/objects/floors/protos/Floor.proto"
+EXTERNPROTO "https://raw.githubusercontent.com/cyberbotics/webots/R2025a/projects/appearances/protos/Parquetry.proto"
 
 WorldInfo {
 }
 Viewpoint {
-  orientation -0.2624541411887986 -0.11161349129057845 0.9584676584709461 3.915695738687748
-  position 1.9310703309461057 2.0864819140978725 1.9621652180091333
+  orientation -0.2003366081879414 -0.07474387208836077 0.9768718426717958 3.840607720831601
+  position 2.024106228716921 1.8284847637704886 1.584745586015778
 }
 TexturedBackground {
 }
@@ -18,7 +22,18 @@ TexturedBackgroundLight {
 RectangleArena {
   floorSize 2 2
 }
+Wall {
+  translation -1 0 0
+  size 0.05 2 2.4
+  appearance Roughcast {
+    colorOverride 1 0 1
+    textureTransform TextureTransform {
+      scale 2.4 1
+    }
+  }
+}
 Solid {
+  translation -0.36675 -0.27781 2.22045e-16
   children [
     DEF Ball Shape {
       appearance PBRAppearance {
@@ -28,6 +43,7 @@ Solid {
       geometry Sphere {
         radius 0.05
       }
+      castShadows FALSE
     }
   ]
   name "solid(1)"
@@ -64,4 +80,11 @@ E-puck {
       height 39
     }
   ]
+}
+Floor {
+  size 2 2
+  appearance Parquetry {
+    type "light strip"
+    colorOverride 0 1 1
+  }
 }

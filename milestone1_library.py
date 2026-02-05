@@ -166,7 +166,6 @@ class PerceptionSystem:
         ]) / 16.0
 
     def load_goal_image(self, goal_img):
-        # 🔹 ONLY CHANGE: resize goal image to 52x52
         goal_img = resize_image(goal_img, 52, 52)
 
         gray = np.dot(goal_img[..., :3], [0.299, 0.587, 0.114])

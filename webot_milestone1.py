@@ -21,7 +21,7 @@ perception = PerceptionSystem()
 
 # LOAD GOAL IMAGE
 goal_img = imageio.imread(
-    "C:\\Perception_of_robot\\goal_reference.png"
+    "C:\Perception_of_robot\goal_resized.jpg"
 )[:, :, :3]
 perception.load_goal_image(goal_img)
 
@@ -29,9 +29,7 @@ print("Milestone 1 – Computer Vision Controller Started")
 
 
 def draw_rectangle(img, bbox, color=(255, 0, 0), thickness=2):
-    """Draw rectangle directly on RGB image"""
     min_r, min_c, max_r, max_c = bbox
-
     img[min_r:min_r+thickness, min_c:max_c] = color
     img[max_r-thickness:max_r, min_c:max_c] = color
     img[min_r:max_r, min_c:min_c+thickness] = color
@@ -40,11 +38,7 @@ def draw_rectangle(img, bbox, color=(255, 0, 0), thickness=2):
 
 while robot.step(timestep) != -1:
     image = camera.getImage()
-
-    # Camera image is BGRA
     img = np.frombuffer(image, dtype=np.uint8).reshape((height, width, 4))
-
-    # Convert to RGB for processing
     frame_rgb = img[:, :, :3].copy()
 
     result = perception.process_frame(frame_rgb)
@@ -55,17 +49,14 @@ while robot.step(timestep) != -1:
 
     for i, f in enumerate(result["features"]):
         cx, cy = f.center
-        min_r, min_c, max_r, max_c = f.bbox
 
-        # ===== DRAW RECTANGLE =====
         if f.is_goal:
-            draw_rectangle(frame_rgb, f.bbox, (0, 255, 0))   # green
+            draw_rectangle(frame_rgb, f.bbox, (0, 255, 0))
         elif f.moving:
-            draw_rectangle(frame_rgb, f.bbox, (255, 255, 0)) # yellow
+            draw_rectangle(frame_rgb, f.bbox, (255, 255, 0))
         else:
-            draw_rectangle(frame_rgb, f.bbox, (255, 0, 0))   # red
+            draw_rectangle(frame_rgb, f.bbox, (255, 0, 0))
 
-        # ===== LABEL =====
         if f.is_goal and f.moving:
             label = "GOAL (DYNAMIC)"
         elif f.is_goal:
@@ -78,17 +69,15 @@ while robot.step(timestep) != -1:
         print(
             f"[{label}] Object {i} "
             f"score={f.goal_score:.3f} "
-            f"bbox=({min_c},{min_r})-({max_c},{max_r}) "
             f"center=({cx:.1f},{cy:.1f})"
         )
 
-    # ===== SEND TO DISPLAY =====
-    # Convert RGB → BGRA for Webots
+    # ===== DISPLAY =====
     bgra = np.zeros((height, width, 4), dtype=np.uint8)
-    bgra[:, :, 0] = frame_rgb[:, :, 2]  # B
-    bgra[:, :, 1] = frame_rgb[:, :, 1]  # G
-    bgra[:, :, 2] = frame_rgb[:, :, 0]  # R
-    bgra[:, :, 3] = 255                 # Alpha
+    bgra[:, :, 0] = frame_rgb[:, :, 2]
+    bgra[:, :, 1] = frame_rgb[:, :, 1]
+    bgra[:, :, 2] = frame_rgb[:, :, 0]
+    bgra[:, :, 3] = 255
 
     image_ref = display.imageNew(
         bgra.tobytes(),

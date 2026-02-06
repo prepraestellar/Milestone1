@@ -206,7 +206,7 @@ class PerceptionSystem:
             for f in features:
                 Dc = bhattacharyya_distance(f.color, self.goal_color)
                 Ds = bhattacharyya_distance(f.hog, self.goal_hog)
-                f.goal_score = 0.6 * Dc + 0.4 * Ds
+                f.goal_score = 0.7 * Dc + 0.3 * Ds
                 f.is_goal = f.goal_score < 0.6
 
         self.prev_gray = gray
